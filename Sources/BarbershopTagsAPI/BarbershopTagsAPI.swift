@@ -15,17 +15,27 @@ public struct BarbershopTagsAPI {
     /// - Parameter id: The ID of the tag from barbershoptags.com
     /// - Returns: The Tag object if found
     /// - Throws:`TagError.noTagsFound` if the given tag ID does not exist in the database
-    public static func getTagByID(_ id: Int) async throws -> Tag {
+    public static func getTagByID(_ id: Int, fldList: [Tag.CodingKeys?]? = nil) async throws -> Tag {
         // Get the base request URL, throw if something went wrong doing that
         guard var requestComponents = baseURL else { throw URLError(.badURL) }
         // Add the id parameter, the only one we need for this query
-        requestComponents.queryItems = [
+        var queryItems = [
             URLQueryItem(name: "id", value: String(id))
         ]
+        if let fldList = fldList,
+           var fldListString = fldList.first??.rawValue {
+            for fld in fldList.dropFirst() {
+                if let fld = fld {
+                    fldListString += ",\(fld)"
+                }
+            }
+            queryItems.append(URLQueryItem(name: "fldlist", value: fldListString))
+        }
         // Add the client query item, if it exists
         if let queryItem = clientQueryItem {
-            requestComponents.queryItems?.append(queryItem)
+            queryItems.append(queryItem)
         }
+        requestComponents.queryItems = queryItems
         // Make sure the URL we just built is valid, otherwise throw
         guard let requestURL = requestComponents.url else { throw URLError(.badURL) }
         // Perform the request
