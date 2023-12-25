@@ -26,7 +26,7 @@ public struct BarbershopTagsAPI {
            var fldListString = fldList.first??.rawValue {
             for fld in fldList.dropFirst() {
                 if let fld = fld {
-                    fldListString += ",\(fld)"
+                    fldListString += ",\(fld.rawValue)"
                 }
             }
             queryItems.append(URLQueryItem(name: "fldlist", value: fldListString))
