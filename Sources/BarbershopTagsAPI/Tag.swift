@@ -368,5 +368,17 @@ open class Tag: Identifiable, Codable, Hashable {
             .other3LearningTrack,
             .other4LearningTrack
         ]
+
+        var fldString: String {
+            switch self {
+            case .id, .stamp:
+                return rawValue
+            default:
+                if let firstChar = rawValue.first?.uppercased() {
+                    return firstChar + rawValue.dropFirst()
+                }
+                return rawValue
+            }
+        }
     }
 }

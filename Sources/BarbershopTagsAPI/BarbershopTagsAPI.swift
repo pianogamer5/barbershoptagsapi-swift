@@ -23,10 +23,10 @@ public struct BarbershopTagsAPI {
             URLQueryItem(name: "id", value: String(id))
         ]
         if let fldList = fldList,
-           var fldListString = fldList.first??.rawValue {
+           var fldListString = fldList.first??.fldString {
             for fld in fldList.dropFirst() {
                 if let fld = fld {
-                    fldListString += ",\(fld.rawValue)"
+                    fldListString += ",\(fld.fldString)"
                 }
             }
             queryItems.append(URLQueryItem(name: "fldlist", value: fldListString))
